@@ -486,8 +486,10 @@ public class PollService {
             }
         }
 
-        log.error("IM服务检查群组失败已达最大重试次数，采取降级策略允许操作继续, groupId: {}, userId: {}",
+        // 无法确认成员身份时按失败处理（fail closed）
+        log.error("IM服务检查群组失败已达最大重试次数，拒绝操作, groupId: {}, userId: {}",
                 groupId, userId, lastException);
+        throw new BizException(ErrorCode.SYSTEM_ERROR);
     }
 
     /**

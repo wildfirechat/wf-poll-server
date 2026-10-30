@@ -43,7 +43,7 @@ public class AuthFilter implements Filter {
         // 验证authCode并获取用户信息
         String userId = validateAuthCode(authCode);
         if (userId == null) {
-            log.warn("Invalid authCode: {}", authCode);
+            log.warn("Invalid authCode in request: {}", requestURI);
             writeErrorResponse(httpResponse, ErrorCode.AUTH_CODE_INVALID);
             return;
         }
@@ -70,7 +70,7 @@ public class AuthFilter implements Filter {
      * 验证authCode，返回用户信息
      */
     private String validateAuthCode(String authCode) {
-        log.info("Validate authCode with IM service, authCode: {}", authCode);
+        log.debug("Validate authCode with IM service");
         try {
             IMResult<OutputApplicationUserInfo> imResult = UserAdmin.applicationGetUserInfo(authCode);
             if (imResult != null && imResult.getErrorCode() == cn.wildfirechat.common.ErrorCode.ERROR_CODE_SUCCESS) {
